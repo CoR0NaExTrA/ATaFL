@@ -2,9 +2,9 @@
 
 ## Синтаксис выражений
 Выражения могут содержать:
-- литералы чисел: целые - `счет`, вещественные - `сущность`
-- литералы строк(`слово`)
-- логические литералы: `истина`, `заблуждение`
+- литералы чисел: целые - `number`, вещественные - `decimal`
+- литералы строк(`text`)
+- логические литералы: `raised`, `lowered`
 - бинарные арифметические операторы
 - операторы сравнения
 - логические операторы
@@ -80,9 +80,9 @@ number = integer | real ;
 integer = digit, { digit } ;
 real = digit, { digit }, ".", digit, { digit } ;
 
-string = "'", { character - "'" | escapeSequence }, "'" ;
+string = "'", { character | escapeSequence }, "'" ;
 character   = ? любой символ Unicode, кроме необработанной одинарной кавычки ? ;
-escapeSequence = "\\", ( "'" | "\\" ) ;
+escapeSequence = "\\", ( "'" | "\\" | "n" | "r" | "t" ) ;
 
 boolean     = "raised" | "lowered" ;
 
@@ -184,7 +184,7 @@ builtin_function = "abs", "(", expression, ")"
                  | "min", "(", argument_list, ")"
                  | "max", "(", argument_list, ")" ;
 
-(* Ввод-вывод *)
+(* Ввод/вывод *)
 input_statement = identifier, "=", "receive", "(", ")", ";" ;
 output_statement = "dispatch", "(", argument_list, ")", ";" ;
 ```
