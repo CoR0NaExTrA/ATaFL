@@ -103,7 +103,7 @@ logical_operator = "&&" | "||" ;
 
 expression = assignment_expression ;
 
-(* Присваивание)
+(* Присваивание*)
 assignment_expression = logical_or_expression,
                         { "=", logical_or_expression } ;
 
