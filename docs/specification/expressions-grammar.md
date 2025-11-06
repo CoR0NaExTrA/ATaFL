@@ -80,97 +80,57 @@ number = integer | real ;
 integer = digit, { digit } ;
 real = digit, { digit }, ".", digit, { digit } ;
 
+<<<<<<< Updated upstream
 string = "'", { character | escapeSequence }, "'" ;
 character   = ? любой символ Unicode, кроме необработанной одинарной кавычки ? ;
 escapeSequence = "\\", ( "'" | "\\" | "n" | "r" | "t" ) ;
+=======
+<<<<<<< HEAD
+string = "'", { character - "'" | escapeSequence }, "'" ;
+character   = ? любой символ Unicode, кроме одинарной кавычки ? ;
+escapeSequence = "\\", ( "'" | "\\" ) ;
+=======
+string = "'", { character | escapeSequence }, "'" ;
+character   = ? любой символ Unicode, кроме необработанной одинарной кавычки ? ;
+escapeSequence = "\\", ( "'" | "\\" | "n" | "r" | "t" ) ;
+>>>>>>> b57f68845ce522324cdcd48958e6202e3516a790
+>>>>>>> Stashed changes
 
-boolean     = "raised" | "lowered" ;
-
-(* Типы данных *)
-type = "text" | "number" | "decimal" | "flag" | "sequence" ;
-
-(* Ключевые слова - регистронезависимые *)
-keyword = "material" | "fixed" | "receive" | "dispatch" | "blueprint" 
-        | "yield" | "check" | "otherwise" | "inspect" | "cyclewhile" 
-        | "cyclefor" | "break" | "continue" ;
+boolean = "истина" | "заблуждение" ;
 
 (* Операторы *)
-operator = arithmetic_operator | comparison_operator | logical_operator ;
-
 arithmetic_operator = "+" | "-" | "*" | "/" | "%" | "**" ;
 comparison_operator = ">" | ">=" | "<" | "<=" | "==" | "!=" ;
 logical_operator = "&&" | "||" ;
 
-(* Разделители *)
-delimiter = ";" | ":" | "," | "=" | "(" | ")" | "{" | "}" ;
+(* === Грамматика выражений === *)
 
-(* Комментарии *)
-comment = "#", { character - newline }, newline ;
-newline = ? символ новой строки ? ;
+expression = assignment_expression ;
 
-(* Синтаксическая структура *)
+(* Присваивание, включая цепочку x = y = 5 *)
+assignment_expression = logical_or_expression,
+                        { "=", logical_or_expression } ;
 
-(* Программа *)
-program = { statement } ;
+logical_or_expression = logical_and_expression,
+                        { "||", logical_and_expression } ;
 
-(* Операторы *)
-statement = variable_declaration
-          | assignment
-          | function_call
-          | function_definition
-          | conditional_statement
-          | loop_statement
-          | break_statement
-          | continue_statement
-          | return_statement
-          | block ;
+logical_and_expression = equality_expression,
+                         { "&&", equality_expression } ;
 
-(* Объявление переменной *)
-variable_declaration = ( "material" | "fixed" ), identifier, ":", type, [ "=", expression ], ";" ;
+equality_expression = comparison_expression,
+                      { ( "==" | "!=" ), comparison_expression } ;
 
-(* Присваивание *)
-assignment = identifier, "=", expression, ";" ;
+comparison_expression = additive_expression,
+                        { ( ">" | ">=" | "<" | "<=" ), additive_expression } ;
 
-(* Вызов функции *)
-function_call = identifier, "(", [ argument_list ], ")", ";" ;
-argument_list = expression, { ",", expression } ;
+additive_expression = multiplicative_expression,
+                      { ( "+" | "-" ), multiplicative_expression } ;
 
-(* Определение функции *)
-function_definition = "blueprint", identifier, "(", [ parameter_list ], ")", block ;
-parameter_list = parameter, { ",", parameter } ;
-parameter = identifier, ":", type ;
+multiplicative_expression = power_expression,
+                            { ( "*" | "/" | "%" ), power_expression } ;
 
-(* Условные операторы *)
-conditional_statement = "check", "(", expression, ")", block, [ "otherwise", block ] ;
-multi_branch_statement = "inspect", "(", expression, ")", "{", { case }, [ default_case ], "}" ;
-case = "check", expression, ":", block ;
-default_case = "otherwise", ":", block ;
-
-(* Циклы *)
-loop_statement = while_loop | for_loop ;
-while_loop = "cyclewhile", "(", expression, ")", block ;
-for_loop = "cyclefor", "(", [ for_init ], ";", [ expression ], ";", [ for_update ], ")", block ;
-for_init = variable_declaration | assignment | expression ;
-for_update = assignment | function_call ;
-
-(* Управление потоком *)
-break_statement = "break", ";" ;
-continue_statement = "continue", ";" ;
-return_statement = "yield", [ expression ], ";" ;
-
-(* Блок кода *)
-block = "{", { statement }, "}" ;
-
-(* Выражения *)
-expression = logical_or_expression ;
-
-logical_or_expression = logical_and_expression, { "||", logical_and_expression } ;
-logical_and_expression = equality_expression, { "&&", equality_expression } ;
-equality_expression = comparison_expression, { ( "==" | "!=" ), comparison_expression } ;
-comparison_expression = additive_expression, { ( ">" | ">=" | "<" | "<=" ), additive_expression } ;
-additive_expression = multiplicative_expression, { ( "+" | "-" ), multiplicative_expression } ;
-multiplicative_expression = power_expression, { ( "*" | "/" | "%" ), power_expression } ;
-power_expression = [ "+" | "-" ], primary_expression, { "**", primary_expression } ;
+power_expression = [ "+" | "-" ], primary_expression,
+                   { "**", primary_expression } ;
 
 primary_expression = literal
                    | identifier
@@ -178,13 +138,17 @@ primary_expression = literal
                    | "(", expression, ")" ;
 
 function_call_expression = identifier, "(", [ argument_list ], ")" ;
+argument_list = expression, { ",", expression } ;
 
 (* Встроенные функции *)
 builtin_function = "abs", "(", expression, ")"
                  | "min", "(", argument_list, ")"
                  | "max", "(", argument_list, ")" ;
+<<<<<<< HEAD
+=======
 
 (* Ввод/вывод *)
 input_statement = identifier, "=", "receive", "(", ")", ";" ;
 output_statement = "dispatch", "(", argument_list, ")", ";" ;
+>>>>>>> b57f68845ce522324cdcd48958e6202e3516a790
 ```
