@@ -80,21 +80,17 @@ number = integer | real ;
 integer = digit, { digit } ;
 real = digit, { digit }, ".", digit, { digit } ;
 
-<<<<<<< Updated upstream
 string = "'", { character | escapeSequence }, "'" ;
 character   = ? любой символ Unicode, кроме необработанной одинарной кавычки ? ;
 escapeSequence = "\\", ( "'" | "\\" | "n" | "r" | "t" ) ;
-=======
-<<<<<<< HEAD
+
 string = "'", { character - "'" | escapeSequence }, "'" ;
 character   = ? любой символ Unicode, кроме одинарной кавычки ? ;
 escapeSequence = "\\", ( "'" | "\\" ) ;
-=======
+
 string = "'", { character | escapeSequence }, "'" ;
 character   = ? любой символ Unicode, кроме необработанной одинарной кавычки ? ;
 escapeSequence = "\\", ( "'" | "\\" | "n" | "r" | "t" ) ;
->>>>>>> b57f68845ce522324cdcd48958e6202e3516a790
->>>>>>> Stashed changes
 
 boolean = "истина" | "заблуждение" ;
 
@@ -107,7 +103,7 @@ logical_operator = "&&" | "||" ;
 
 expression = assignment_expression ;
 
-(* Присваивание, включая цепочку x = y = 5 *)
+(* Присваивание)
 assignment_expression = logical_or_expression,
                         { "=", logical_or_expression } ;
 
@@ -144,11 +140,8 @@ argument_list = expression, { ",", expression } ;
 builtin_function = "abs", "(", expression, ")"
                  | "min", "(", argument_list, ")"
                  | "max", "(", argument_list, ")" ;
-<<<<<<< HEAD
-=======
 
 (* Ввод/вывод *)
 input_statement = identifier, "=", "receive", "(", ")", ";" ;
 output_statement = "dispatch", "(", argument_list, ")", ";" ;
->>>>>>> b57f68845ce522324cdcd48958e6202e3516a790
 ```
