@@ -73,56 +73,6 @@
 ## Грамматика в нотации EBNF
 
 ```ebnf
-(* Базовые символы *)
-digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
-
-letter = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" 
-       | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" 
-       | "u" | "v" | "w" | "x" | "y" | "z" 
-       | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" 
-       | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" 
-       | "U" | "V" | "W" | "X" | "Y" | "Z" ;
-
-(* Идентификаторы *)
-identifier  = ( letter | "_" ), { letter | digit | "_" } ;
-
-(* Литералы *)
-literal = number | string | boolean ;
-
-number = integer | real ;
-integer = digit, { digit } ;
-real = digit, { digit }, ".", digit, { digit } ;
-
-string = "'", { character - "'" | escapeSequence }, "'" ;
-character   = ? любой символ Unicode, кроме необработанной одинарной кавычки ? ;
-escapeSequence = "\\", ( "'" | "\\" ) ;
-
-boolean     = "raised" | "lowered" ;
-
-(* Типы данных *)
-type = "text" | "number" | "decimal" | "flag" | "sequence" ;
-
-(* Ключевые слова - регистронезависимые *)
-keyword = "material" | "fixed" | "receive" | "dispatch" | "blueprint" 
-        | "yield" | "check" | "otherwise" | "inspect" | "cyclewhile" 
-        | "cyclefor" | "break" | "continue" ;
-
-(* Операторы *)
-operator = arithmetic_operator | comparison_operator | logical_operator ;
-
-arithmetic_operator = "+" | "-" | "*" | "/" | "%" | "**" ;
-comparison_operator = ">" | ">=" | "<" | "<=" | "==" | "!=" ;
-logical_operator = "&&" | "||" ;
-
-(* Разделители *)
-delimiter = ";" | ":" | "," | "=" | "(" | ")" | "{" | "}" ;
-
-(* Комментарии *)
-comment = "#", { character - newline }, newline ;
-newline = ? символ новой строки ? ;
-
-(* Синтаксическая структура *)
-
 (* Программа *)
 program = { top_level_statement } ;
 top_level_statement = function_definition | statement ;
@@ -147,12 +97,8 @@ variable_declaration = ( "material" | "fixed" ), identifier, ":", type, [ "=", e
 (* Присваивание *)
 assignment = identifier, "=", expression, ";" ;
 
-(* Вызов функции *)
-function_call = identifier, "(", [ argument_list ], ")", ";" ;
-argument_list = expression, { ",", expression } ;
-
 (* Определение функции *)
-function_definition = "blueprint", identifier, "(", [ parameter_list ], ")", block ;
+function_definition = "blueprint", identifier, "(", [ parameter_list ], ")", ":", type, block ;
 parameter_list = parameter, { ",", parameter } ;
 parameter = identifier, ":", type ;
 
@@ -176,29 +122,6 @@ return_statement = "yield", [ expression ], ";" ;
 
 (* Блок кода *)
 block = "{", { statement }, "}" ;
-
-(* Выражения *)
-expression = logical_or_expression ;
-
-logical_or_expression = logical_and_expression, { "||", logical_and_expression } ;
-logical_and_expression = equality_expression, { "&&", equality_expression } ;
-equality_expression = comparison_expression, { ( "==" | "!=" ), comparison_expression } ;
-comparison_expression = additive_expression, { ( ">" | ">=" | "<" | "<=" ), additive_expression } ;
-additive_expression = multiplicative_expression, { ( "+" | "-" ), multiplicative_expression } ;
-multiplicative_expression = power_expression, { ( "*" | "/" | "%" ), power_expression } ;
-power_expression = [ "+" | "-" ], primary_expression, { "**", primary_expression } ;
-
-primary_expression = literal
-                   | identifier
-                   | function_call_expression
-                   | "(", expression, ")" ;
-
-function_call_expression = identifier, "(", [ argument_list ], ")" ;
-
-(* Встроенные функции *)
-builtin_function = "abs", "(", expression, ")"
-                 | "min", "(", argument_list, ")"
-                 | "max", "(", argument_list, ")" ;
 
 (* Ввод-вывод *)
 input_statement = identifier, "=", "receive", "(", ")", ";" ;

@@ -3,8 +3,7 @@
 ## Синтаксис выражений
 Выражения могут содержать:
 - литералы чисел: целые - `number`, вещественные - `decimal`
-- литералы строк(`text`)
-- логические литералы: `raised`, `lowered`
+- литералы строк
 - бинарные арифметические операторы
 - операторы сравнения
 - логические операторы
@@ -74,7 +73,7 @@ letter = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
 identifier  = ( letter | "_" ), { letter | digit | "_" } ;
 
 (* Литералы *)
-literal = number | string | boolean ;
+literal = number | string ;
 
 number = integer | real ;
 integer = digit, { digit } ;
@@ -84,29 +83,11 @@ string = "'", { character | escapeSequence }, "'" ;
 character   = ? любой символ Unicode, кроме необработанной одинарной кавычки ? ;
 escapeSequence = "\\", ( "'" | "\\" | "n" | "r" | "t" ) ;
 
-string = "'", { character - "'" | escapeSequence }, "'" ;
-character   = ? любой символ Unicode, кроме одинарной кавычки ? ;
-escapeSequence = "\\", ( "'" | "\\" ) ;
-
-string = "'", { character | escapeSequence }, "'" ;
-character   = ? любой символ Unicode, кроме необработанной одинарной кавычки ? ;
-escapeSequence = "\\", ( "'" | "\\" | "n" | "r" | "t" ) ;
-
-boolean = "истина" | "заблуждение" ;
-
-(* Операторы *)
-arithmetic_operator = "+" | "-" | "*" | "/" | "%" | "**" ;
-comparison_operator = ">" | ">=" | "<" | "<=" | "==" | "!=" ;
-logical_operator = "&&" | "||" ;
-
 (* === Грамматика выражений === *)
 
-expression = assignment_expression ;
+expression = logical_or_expression ;
 
 (* Присваивание*)
-assignment_expression = logical_or_expression,
-                        { "=", logical_or_expression } ;
-
 logical_or_expression = logical_and_expression,
                         { "||", logical_and_expression } ;
 
@@ -130,18 +111,14 @@ power_expression = [ "+" | "-" ], primary_expression,
 
 primary_expression = literal
                    | identifier
-                   | function_call_expression
+                   | function_call
                    | "(", expression, ")" ;
 
-function_call_expression = identifier, "(", [ argument_list ], ")" ;
+function_call = identifier, "(", [ argument_list ], ")" ;
 argument_list = expression, { ",", expression } ;
 
 (* Встроенные функции *)
 builtin_function = "abs", "(", expression, ")"
                  | "min", "(", argument_list, ")"
                  | "max", "(", argument_list, ")" ;
-
-(* Ввод/вывод *)
-input_statement = identifier, "=", "receive", "(", ")", ";" ;
-output_statement = "dispatch", "(", argument_list, ")", ";" ;
 ```
