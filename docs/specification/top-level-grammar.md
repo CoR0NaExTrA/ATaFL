@@ -75,7 +75,7 @@
 ```ebnf
 (* Программа *)
 program = { top_level_statement } ;
-top_level_statement = function_definition | statement ;
+top_level_statement = "blueprint", "main", "(", [ parameter_list ], ")", ":", type, block ;
 
 (* Операторы *)
 statement = variable_declaration

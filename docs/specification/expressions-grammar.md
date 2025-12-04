@@ -79,9 +79,12 @@ number = integer | real ;
 integer = digit, { digit } ;
 real = digit, { digit }, ".", digit, { digit } ;
 
-string = "'", { character | escapeSequence }, "'" ;
-character   = ? любой символ Unicode, кроме необработанной одинарной кавычки ? ;
+string = "'", { character - "'" | escapeSequence }, "'" ;
+character   = ? любой символ Unicode ? ;
 escapeSequence = "\\", ( "'" | "\\" | "n" | "r" | "t" ) ;
+
+(* Типы данных *)
+type = "text" | "number" | "decimal" | "void" ;
 
 (* === Грамматика выражений === *)
 
